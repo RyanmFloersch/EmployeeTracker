@@ -1,7 +1,8 @@
 const cTable = require('console.table');
 
 function showDepartments(connection){
-    return connection.query(`SELECT * FROM departments`, function(err, result, fields){
+
+    connection.query(`SELECT * FROM departments`, function(err, result, fields){
         if(err) throw err;
 
         // console.log(result);
@@ -13,10 +14,12 @@ function showDepartments(connection){
 
     });
 
+
 }
 
 function showRoles(connection){
-    return connection.query(`SELECT * FROM roles`, function(err, result, fields){
+    let roles;
+    connection.query(`SELECT * FROM roles`, function(err, result, fields){
         if(err) throw err;
 
         // console.log(result);
@@ -25,12 +28,22 @@ function showRoles(connection){
             // ['id','title', 'salary', 'department_id'],
             result
         );
-
+            // console.log(roles);
     });
+
+    // connection.promise().query(`SELECT * FROM roles`).then(([rows,fields]) => {
+    //     console.table(
+    //         '***Roles***',
+    //         rows
+    //     );
+    // }
+    // ).catch(console.log);
+
 }
 
 function showEmployees(connection){
-    return connection.query(`SELECT * FROM employees`, function(err, result, fields){
+    let emp;
+    connection.query(`SELECT * FROM employees`, function(err, result, fields){
         if(err) throw err;
 
         // console.log(result);
@@ -41,6 +54,7 @@ function showEmployees(connection){
         );
 
     });
+
 }
 
 function addDept(connection, name){

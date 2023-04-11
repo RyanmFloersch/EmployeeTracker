@@ -17,13 +17,11 @@
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 
 const inquirer = require('inquirer');
-const express = require('express');
 const mysql = require('mysql2');
 const cTable = require("console.table");
 const commands = require('./assets/js/commands');
 
 
-const app = express();
 
     // Move this after the prompt or set it up within it?
     const connection = mysql.createConnection(
@@ -58,7 +56,7 @@ switch (answerObj.option) {
         // THEN I am presented with a formatted table showing department names and department ids
         // console.log('All dept was selected');
         let departments = commands.showDepartments(connection);
-        // console.log(dept);
+        // console.log(departments);
         break;
     case 'view all roles':
         // console.log('All roles was selected');
@@ -93,6 +91,11 @@ switch (answerObj.option) {
     default:
         break;
 }
-    return;
+
+    connection.close();
+
+
+}).catch((err)=>{
+    if(err) throw err;
 });
 
