@@ -19,15 +19,22 @@
 const inquirer = require('inquirer');
 const express = require('express');
 const mysql = require('mysql2');
+const cTable = require("console.table");
+const commands = require('./assets/js/commands');
+
 
 const app = express();
 
-// Move this after the prompt or set it up within it?
-// const connection = mysql.createConnection({
-//     user: 'root',
-//     password: '',
-//     database: 'employees'
-//   });
+    // Move this after the prompt or set it up within it?
+    const connection = mysql.createConnection(
+        {
+            user: 'root',
+            password: '',
+            database: 'company'
+        },
+        console.log("Connected to comapny database")
+
+    );
 
 
 // WHEN I start the application
@@ -35,46 +42,57 @@ const app = express();
 
 inquirer.prompt([
     {
-        name: 'command',
+        name: 'option',
         type: 'list',
         message: "Select a command: ",
         choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
     }
-]).then((answerObj)=>{
-
-    // Move this after the prompt or set it up within it?
-    const connection = mysql.createConnection({
-        user: 'root',
-        password: '',
-        database: 'employees'
-    });
+]).then((answerObj) => {
 
 
-    switch(answerObj.command){
-        case 'view all departments':
-            // WHEN I choose to view all departments
-            // THEN I am presented with a formatted table showing department names and department ids
 
 
-            console.log('All dept was selected');
-            connection.query(`SELECT * FROM departments`);
-            break;
-        case 'view all roles':
-            console.log('All roles was selected');
-            break;
-        case 'view all employees':
-            break;
+switch (answerObj.option) {
+    case 'view all departments':
+        // WHEN I choose to view all departments
+        // THEN I am presented with a formatted table showing department names and department ids
+        // console.log('All dept was selected');
+        let departments = commands.showDepartments(connection);
+        // console.log(dept);
+        break;
+    case 'view all roles':
+        // console.log('All roles was selected');
+        let roles = commands.showRoles(connection);
+        // console.log(roles);
+        break;
+    case 'view all employees':
+        let emp = commands.showEmployees(connection);
+        // console.log(emp);
+        break;
 
-        case 'add a department':
-            break;
-        case 'add a role':
-            break;
+    case 'add a department':
+        // WHEN I choose to add a department
+        // THEN I am prompted to enter the name of the department and that department is added to the database
+        inquirer.prompt(
+            {
+            name: 'deptName',
+            message: 'What is the department name?' 
+        }
+        ).then((deptAns)=>{
+            commands.addDept(connection, deptAns.deptName);
 
-        case 'add an employee':
-            break;
-        case 'update an employee role':
-            break;
-        default:
-    }
+        });
+        break;
+    case 'add a role':
+        break;
+
+    case 'add an employee':
+        break;
+    case 'update an employee role':
+        break;
+    default:
+        break;
+}
+    return;
 });
 
