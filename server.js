@@ -30,15 +30,51 @@ const app = express();
 //   });
 
 
+// WHEN I start the application
+// THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
 
-// inquirer.prompt([
-//     {
-//         name: 'test1',
-//         message: 'Can you enter?'
-//     },
-//     {
-//         name: 'test2',
-//         message: "Where you able to enter"
-//     }
-// ]).then();
+inquirer.prompt([
+    {
+        name: 'command',
+        type: 'list',
+        message: "Select a command: ",
+        choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
+    }
+]).then((answerObj)=>{
+
+    // Move this after the prompt or set it up within it?
+    const connection = mysql.createConnection({
+        user: 'root',
+        password: '',
+        database: 'employees'
+    });
+
+
+    switch(answerObj.command){
+        case 'view all departments':
+            // WHEN I choose to view all departments
+            // THEN I am presented with a formatted table showing department names and department ids
+
+
+            console.log('All dept was selected');
+            connection.query(`SELECT * FROM departments`);
+            break;
+        case 'view all roles':
+            console.log('All roles was selected');
+            break;
+        case 'view all employees':
+            break;
+
+        case 'add a department':
+            break;
+        case 'add a role':
+            break;
+
+        case 'add an employee':
+            break;
+        case 'update an employee role':
+            break;
+        default:
+    }
+});
 
