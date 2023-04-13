@@ -1,8 +1,11 @@
 const cTable = require('console.table');
+const mysql = require('mysql2');
 
-function showDepartments(connection){
 
-    connection.query(`SELECT * FROM departments`, function(err, result, fields){
+
+async function showDepartments(connection){
+
+    await connection.promise().query(`SELECT * FROM departments`, function(err, result, fields){
         if(err) throw err;
 
         // console.log(result);
@@ -11,14 +14,13 @@ function showDepartments(connection){
             // ['id','name'],
             result
         );
-
     });
-
-
 }
 
+
+
+
 function showRoles(connection){
-    let roles;
     connection.query(`SELECT * FROM roles`, function(err, result, fields){
         if(err) throw err;
 
@@ -58,7 +60,12 @@ function showEmployees(connection){
 }
 
 function addDept(connection, name){
-    connection.query(`INSERT INTO departments (name) VALUES (${name})`);
+    connection.query(`CREATE TABLE ${name}`, function(err, result, fields){
+        if(err) throw err;
+
+        console.log(result);
+    });
+    
 }
 
 module.exports = {
